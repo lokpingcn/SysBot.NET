@@ -580,8 +580,6 @@ namespace SysBot.Pokemon
 
         private async Task<(PA8 toSend, PokeTradeResult check)> HandleClone(SAV8LA sav, PokeTradeDetail<PA8> poke, PA8 offered, CancellationToken token)
         {
-            if (Hub.Config.Discord.ReturnPKMs)
-                poke.SendNotification(this, offered, "Here's what you showed me!");
 
             var la = new LegalityAnalysis(offered);
             if (!la.Valid)

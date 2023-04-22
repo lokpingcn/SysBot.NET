@@ -4,7 +4,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using PKHeX.Core;
 using SysBot.Base;
-using SysBot.Pokemon.Z3;
 
 namespace SysBot.Pokemon.ConsoleApp
 {
@@ -28,7 +27,6 @@ namespace SysBot.Pokemon.ConsoleApp
             {
                 var lines = File.ReadAllText(ConfigPath);
                 var cfg = JsonSerializer.Deserialize(lines, ProgramConfigContext.Default.ProgramConfig) ?? new ProgramConfig();
-                PokeTradeBot.SeedChecker = new Z3SeedSearchHandler<PK8>();
                 BotContainer.RunBots(cfg);
             }
             catch (Exception)

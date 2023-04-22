@@ -8,7 +8,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using SysBot.Pokemon.Z3;
 
 namespace SysBot.Pokemon.WinForms
 {
@@ -22,7 +21,6 @@ namespace SysBot.Pokemon.WinForms
         {
             InitializeComponent();
 
-            PokeTradeBot.SeedChecker = new Z3SeedSearchHandler<PK8>();
             if (File.Exists(Program.ConfigPath))
             {
                 var lines = File.ReadAllText(Program.ConfigPath);
