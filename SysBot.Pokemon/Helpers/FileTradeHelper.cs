@@ -18,6 +18,11 @@ namespace SysBot.Pokemon.Helpers
         /// <returns></returns>
         public static List<T> Bin2List(byte[] bb)
         {
+            if (pkmSize[typeof(T)] == bb.Length)
+            {
+                var tp = GetPKM(bb);
+                if (tp != null && tp.Species > 0 && tp.Valid && tp is T pkm) return new List<T>() { pkm };
+            }
             int size = pkmSizeInBin[typeof(T)];
             int times = bb.Length % size == 0 ? (bb.Length / size) : (bb.Length / size + 1);
             List<T> pkmBytes = new();
