@@ -26,6 +26,9 @@ namespace SysBot.Tests
         [InlineData("公小火龙的蛋")]
         [InlineData("大剑鬼")]
         [InlineData("火暴兽")]
+        [InlineData("千面避役")]
+        [InlineData("泪眼蜥")]
+        [InlineData("布里卡隆")]
         public void TestLegal(string input)
         {
             var setstring = ShowdownTranslator<PK9>.Chinese2Showdown(input);
