@@ -89,7 +89,11 @@ namespace SysBot.Pokemon
             InitSaveData(sav);
 
             if (!IsValidTrainerData())
+            {
+                await CheckForRAMShiftingApps(token).ConfigureAwait(false);
                 throw new Exception("训练家数据无效。请参考https://docs.qq.com/doc/DSWNwV1pLVnZudnJF");
+            }
+
             if (await GetTextSpeed(token).ConfigureAwait(false) < TextSpeedOption.Fast)
                 throw new Exception("请在游戏中设置文本速度为快速，然后重启机器人");
 

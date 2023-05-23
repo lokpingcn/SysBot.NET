@@ -20,10 +20,6 @@ namespace SysBot.Pokemon
 
         public ICountSettings Counts => TradeSettings;
 
-        private static readonly TrackedUserLog PreviousUsers = new();
-        private static readonly TrackedUserLog PreviousUsersDistribution = new();
-        private static readonly TrackedUserLog EncounteredUsers = new();
-
         /// <summary>
         /// Folder to dump received trade data to.
         /// </summary>
@@ -290,7 +286,7 @@ namespace SysBot.Pokemon
             RecordUtil<PokeTradeBot>.Record($"Initiating\t{trainerNID:X16}\t{tradePartner.TrainerName}\t{poke.Trainer.TrainerName}\t{poke.Trainer.ID}\t{poke.ID}\t{toSend.EncryptionConstant:X8}");
             Log($"Found Link Trade partner: {tradePartner.TrainerName}-{tradePartner.TID7} (ID: {trainerNID})");
 
-            var partnerCheck = CheckPartnerReputation(poke, trainerNID, tradePartner.TrainerName);
+            var partnerCheck = await CheckPartnerReputation(this, poke, trainerNID, tradePartner.TrainerName, AbuseSettings, PreviousUsers, PreviousUsersDistribution, EncounteredUsers, token);
             if (partnerCheck != PokeTradeResult.Success)
             {
                 await ExitTrade(false, token).ConfigureAwait(false);
