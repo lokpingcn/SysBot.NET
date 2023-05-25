@@ -1,6 +1,5 @@
 ﻿using PKHeX.Core;
 using SysBot.Base;
-using SysBot.Pokemon.Z3;
 using System;
 using System.Collections.Generic;
 using System.IO;
