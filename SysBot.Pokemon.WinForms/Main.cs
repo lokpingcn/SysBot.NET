@@ -1,5 +1,6 @@
 ﻿using PKHeX.Core;
 using SysBot.Base;
+using SysBot.Pokemon.Z3;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -284,7 +285,7 @@ namespace SysBot.Pokemon.WinForms
             var cfg = BotConfigUtil.GetConfig<SwitchConnectionConfig>(ip, port);
             cfg.Protocol = (SwitchProtocol)WinFormsUtil.GetIndex(CB_Protocol);
 
-            var pk = new PokeBotState {Connection = cfg};
+            var pk = new PokeBotState { Connection = cfg };
             var type = (PokeRoutineType)WinFormsUtil.GetIndex(CB_Routine);
             pk.Initialize(type);
             return pk;
