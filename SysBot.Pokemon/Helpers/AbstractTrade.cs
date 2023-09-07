@@ -434,7 +434,7 @@ namespace SysBot.Pokemon.Helpers
 
             var la = new LegalityAnalysis(pk);
             var enc = la.EncounterMatch;
-            pk.CurrentFriendship = 1;
+            pk.CurrentFriendship = enc is IHatchCycle s ? s.EggCycles : pk.PersonalInfo.HatchCycles;
 
             Span<ushort> relearn = stackalloc ushort[4];
             la.GetSuggestedRelearnMoves(relearn, enc);
