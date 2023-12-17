@@ -33,7 +33,7 @@ namespace SysBot.Pokemon.Discord
         {
             var name = Info.TrainerName;
             var trainer = string.IsNullOrEmpty(name) ? string.Empty : $", {name}";
-            Trader.SendMessageAsync($"搜索到您了！{trainer}! 我的暱稱是 **{routine.InGameName}**.").ConfigureAwait(false);
+            Trader.SendMessageAsync($"开始搜索了！我的暱稱是 **{routine.InGameName}**.").ConfigureAwait(false);
         }
 
         public void TradeCanceled(PokeRoutineExecutor<T> routine, PokeTradeDetail<T> info, PokeTradeResult msg)
