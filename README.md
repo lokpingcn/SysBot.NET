@@ -1,3 +1,4 @@
+# Discord交互已漢化，非中文玩家勿用。
 # SysBot.NET
 ![License](https://img.shields.io/badge/License-AGPLv3-blue.svg)
 
