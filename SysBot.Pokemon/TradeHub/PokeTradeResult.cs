@@ -5,7 +5,7 @@
         Success,
 
         // Trade Partner Failures
-        未找到玩家,
+        NoTrainerFound,
         TrainerTooSlow,
         TrainerLeft,
         TrainerOfferCanceledQuick,
