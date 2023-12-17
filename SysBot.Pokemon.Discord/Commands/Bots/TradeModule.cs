@@ -160,7 +160,7 @@ namespace SysBot.Pokemon.Discord
             var attachment = Context.Message.Attachments.FirstOrDefault();
             if (attachment == default)
             {
-                await ReplyAsync("No attachment provided!").ConfigureAwait(false);
+                await ReplyAsync("您沒有提供附件！或者您可以使用指令進行交換！").ConfigureAwait(false);
                 return;
             }
 
@@ -191,14 +191,14 @@ namespace SysBot.Pokemon.Discord
         {
             if (!pk.CanBeTraded())
             {
-                await ReplyAsync("Provided Pokémon content is blocked from trading!").ConfigureAwait(false);
+                await ReplyAsync("該寶可夢被禁止交換！").ConfigureAwait(false);
                 return;
             }
 
             var la = new LegalityAnalysis(pk);
             if (!la.Valid)
             {
-                await ReplyAsync($"{typeof(T).Name} attachment is not legal, and cannot be traded!").ConfigureAwait(false);
+                await ReplyAsync($"{typeof(T).Name} 文件不合法，請重新檢查！").ConfigureAwait(false);
                 return;
             }
 
