@@ -137,10 +137,10 @@ namespace SysBot.Pokemon.Discord
         {
             return result switch
             {
-                QueueResultRemove.CurrentlyProcessing => "Looks like you're currently being processed! Did not remove from all queues.",
-                QueueResultRemove.CurrentlyProcessingRemoved => "Looks like you're currently being processed!",
-                QueueResultRemove.Removed => "Removed you from the queue.",
-                _ => "Sorry, you are not currently in the queue.",
+                QueueResultRemove.CurrentlyProcessing => "看來您目前正在接受處理！ 沒有從所有隊列中刪除。",
+                QueueResultRemove.CurrentlyProcessingRemoved => "看來您目前正在接受處理！",
+                QueueResultRemove.Removed => "已將您從隊列中刪除。",
+                _ => "抱歉，您目前不在隊列中。",
             };
         }
     }
