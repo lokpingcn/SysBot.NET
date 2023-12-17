@@ -86,7 +86,7 @@ namespace SysBot.Pokemon.Discord
             var pokeName = "";
             if (t == PokeTradeType.Specific && pk.Species != 0)
                 pokeName = $" Receiving: {GameInfo.GetStrings(1).Species[pk.Species]}.";
-            msg = $"{user.Mention} - Added to the {type} queue{ticketID}. 您在第 {position.Position}位.{pokeName}";
+            msg = $"{user.Mention} - 您在第 {position.Position}位";
 
             var botct = Info.Hub.Bots.Count;
             if (position.Position > botct)
