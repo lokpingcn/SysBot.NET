@@ -86,13 +86,13 @@ namespace SysBot.Pokemon.Discord
             var pokeName = "";
             if (t == PokeTradeType.Specific && pk.Species != 0)
                 pokeName = $" Receiving: {GameInfo.GetStrings(1).Species[pk.Species]}.";
-            msg = $"{user.Mention} - 您在第 {position.Position}位";
+            msg = $"{user.Mention} - 您在第 {position.Position}位，交換密碼已通過私信發給您，";
 
             var botct = Info.Hub.Bots.Count;
             if (position.Position > botct)
             {
                 var eta = Info.Hub.Config.Queues.EstimateDelay(position.Position, botct);
-                msg += $" 大概還需等待 {eta:F1} 分鐘.";
+                msg += $" 大概還需等待 {eta:F1} 分鐘。";
             }
             return true;
         }
