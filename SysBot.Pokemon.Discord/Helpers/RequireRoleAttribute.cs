@@ -28,7 +28,7 @@ namespace SysBot.Pokemon.Discord
                 return Task.FromResult(PreconditionResult.FromSuccess());
 
             // Since it wasn't, fail
-            return Task.FromResult(PreconditionResult.FromError($"您必須具有名為 {_name} 的角色才能執行此命令。"));
+            return Task.FromResult(PreconditionResult.FromError($"您必須具有名為 {_name} 的角色才能執行此命令！"));
         }
     }
 }
