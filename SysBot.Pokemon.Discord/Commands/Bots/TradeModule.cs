@@ -67,7 +67,7 @@ namespace SysBot.Pokemon.Discord
                 if (pkm is not T pk || !la.Valid)
                 {
                     var reason = result == "Timeout" ? $"That {spec} set took too long to generate." : result == "VersionMismatch" ? "Request refused: PKHeX and Auto-Legality Mod version mismatch." : $"I wasn't able to create a {spec} from that set.";
-                    var imsg = $"Oops! {reason}";
+                    var imsg = $"完犢子! {reason}";
                     if (result == "Failed")
                         imsg += $"\n{AutoLegalityWrapper.GetLegalizationHint(template, sav, pkm)}";
                     await ReplyAsync(imsg).ConfigureAwait(false);
@@ -81,7 +81,7 @@ namespace SysBot.Pokemon.Discord
             catch (Exception ex)
             {
                 LogUtil.LogSafe(ex, nameof(TradeModule<T>));
-                var msg = $"Oops! An unexpected problem happened with this Showdown Set:\n```{string.Join("\n", set.GetSetLines())}```";
+                var msg = $"發生意外故障:\n```{string.Join("\n", set.GetSetLines())}```";
                 await ReplyAsync(msg).ConfigureAwait(false);
             }
         }
@@ -168,7 +168,7 @@ namespace SysBot.Pokemon.Discord
             var pk = GetRequest(att);
             if (pk == null)
             {
-                await ReplyAsync("Attachment provided is not compatible with this module!").ConfigureAwait(false);
+                await ReplyAsync("該附件與本機器人不兼容!").ConfigureAwait(false);
                 return;
             }
 
