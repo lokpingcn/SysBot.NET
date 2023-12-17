@@ -13,7 +13,7 @@ namespace SysBot.Pokemon.Discord
         {
             if (set.Species <= 0)
             {
-                await channel.SendMessageAsync("Oops! I wasn't able to interpret your message! If you intended to convert something, please double check what you're pasting!").ConfigureAwait(false);
+                await channel.SendMessageAsync("哎呀！ 我無法解讀您的訊息！ 如果您打算轉換某些內容，請仔細檢查您要貼上的內容！").ConfigureAwait(false);
                 return;
             }
 
