@@ -73,7 +73,7 @@ namespace SysBot.Pokemon.Discord
 
             if (added == QueueResultAdd.AlreadyInQueue)
             {
-                msg = "抱歉！您已經在排隊中了！";
+                msg = "{user.Mention} - 抱歉！您已經在排隊中了！";
                 return false;
             }
 
