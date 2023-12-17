@@ -15,13 +15,13 @@ namespace SysBot.Pokemon.Discord
         {
             if ((uint)code > MaxTradeCode)
             {
-                await context.Channel.SendMessageAsync("Trade code should be 00000000-99999999!").ConfigureAwait(false);
+                await context.Channel.SendMessageAsync("交換密碼應該設為 00000000-99999999!").ConfigureAwait(false);
                 return;
             }
 
             try
             {
-                const string helper = "I've added you to the queue! I'll message you here when your trade is starting.";
+                const string helper = "我已經將您添加進排隊的隊列中，當稍後輪到您的時候，我將會在這裡給您發消息，請注意查看";
                 IUserMessage test = await trader.SendMessageAsync(helper).ConfigureAwait(false);
 
                 // Try adding
@@ -30,7 +30,7 @@ namespace SysBot.Pokemon.Discord
                 // Notify in channel
                 await context.Channel.SendMessageAsync(msg).ConfigureAwait(false);
                 // Notify in PM to mirror what is said in the channel.
-                await trader.SendMessageAsync($"{msg}\nYour trade code will be **{code:0000 0000}**.").ConfigureAwait(false);
+                await trader.SendMessageAsync($"{msg}\n您等下的連接密碼將會是 **{code:0000 0000}**.").ConfigureAwait(false);
 
                 // Clean Up
                 if (result)
@@ -73,7 +73,7 @@ namespace SysBot.Pokemon.Discord
 
             if (added == QueueResultAdd.AlreadyInQueue)
             {
-                msg = "Sorry, you are already in the queue.";
+                msg = "抱歉！您已經在排隊中了！";
                 return false;
             }
 
@@ -86,13 +86,13 @@ namespace SysBot.Pokemon.Discord
             var pokeName = "";
             if (t == PokeTradeType.Specific && pk.Species != 0)
                 pokeName = $" Receiving: {GameInfo.GetStrings(1).Species[pk.Species]}.";
-            msg = $"{user.Mention} - Added to the {type} queue{ticketID}. Current Position: {position.Position}.{pokeName}";
+            msg = $"{user.Mention} - Added to the {type} queue{ticketID}. 您在第 {position.Position}位.{pokeName}";
 
             var botct = Info.Hub.Bots.Count;
             if (position.Position > botct)
             {
                 var eta = Info.Hub.Config.Queues.EstimateDelay(position.Position, botct);
-                msg += $" Estimated: {eta:F1} minutes.";
+                msg += $" 大概還需等待 {eta:F1} 分鐘.";
             }
             return true;
         }
@@ -124,7 +124,7 @@ namespace SysBot.Pokemon.Discord
                 case DiscordErrorCode.CannotSendMessageToUser:
                     {
                         // The user either has DMs turned off, or Discord thinks they do.
-                        message = context.User == trader ? "You must enable private messages in order to be queued!" : "The mentioned user must enable private messages in order for them to be queued!";
+                        message = context.User == trader ? "您必須開啟私人消息權限才可以排隊！" : "上述用戶必須啟用私人消息可能排隊！";
                     }
                     break;
                 default:
