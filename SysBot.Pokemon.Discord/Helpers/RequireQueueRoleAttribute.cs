@@ -25,7 +25,7 @@ namespace SysBot.Pokemon.Discord
 
             // Check if this user is a Guild User, which is the only context where roles exist
             if (context.User is not SocketGuildUser gUser)
-                return Task.FromResult(PreconditionResult.FromError("You must be sending the message from a guild to run this command."));
+                return Task.FromResult(PreconditionResult.FromError("您必須從社群頻道發送訊息才能執行此命令"));
 
             var roles = gUser.Roles;
             if (mgr.CanUseSudo(roles.Select(z => z.Name)))
@@ -33,10 +33,10 @@ namespace SysBot.Pokemon.Discord
 
             bool canQueue = SysCordSettings.HubConfig.Queues.CanQueue;
             if (!canQueue)
-                return Task.FromResult(PreconditionResult.FromError("Sorry, I am not currently accepting queue requests!"));
+                return Task.FromResult(PreconditionResult.FromError("抱歉，由於人數過多我目前不接受隊列請求！請稍後重試"));
 
             if (!mgr.GetHasRoleAccess(_name, roles.Select(z => z.Name)))
-                return Task.FromResult(PreconditionResult.FromError("You do not have the required role to run this command."));
+                return Task.FromResult(PreconditionResult.FromError("您沒有執行此命令所需的角色。"));
 
             return Task.FromResult(PreconditionResult.FromSuccess());
         }
