@@ -46,7 +46,7 @@ namespace SysBot.Pokemon.Discord
         {
             OnFinish?.Invoke(routine);
             var tradedToUser = Data.Species;
-            var message = tradedToUser != 0 ? $"交易完成！. 享受您的 {(Species)tradedToUser} 吧!" : "交易結束!";
+            var message = tradedToUser != 0 ? $"交易完成！祝您與 {(Species)tradedToUser} 玩的愉快!" : "交易結束!";
             Trader.SendMessageAsync(message).ConfigureAwait(false);
             if (result.Species != 0 && Hub.Config.Discord.ReturnPKMs)
                 Trader.SendPKMAsync(result, "這是您傳給我的寶可夢文件!").ConfigureAwait(false);
