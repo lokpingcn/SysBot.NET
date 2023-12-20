@@ -13,13 +13,6 @@
 ## 我的DoDo頻道
 - https://discord.gg/TCErJXz4Xs
 # SysBot.NET
-![License](https://img.shields.io/badge/License-AGPLv3-blue.svg)
-
-## Support Discord:
-
-For support on setting up your own instance of SysBot.NET, feel free to join the discord! (Beware of un-official discords who claim to be official)
-
-[<img src="https://canary.discordapp.com/api/guilds/401014193211441153/widget.png?style=banner2">](https://discord.gg/TCErJXz4Xs)
 
 [sys-botbase](https://github.com/olliz0r/sys-botbase) client for remote control automation of Nintendo Switch consoles.
 
