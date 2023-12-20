@@ -1,4 +1,9 @@
 # Discord交互已漢化，非中文玩家勿用。
+由于Easy大佬长时间未更新，我就自己更新了一部分。由于我不是开发者，不保证程序能够稳定运行，但只是我还没有遇到问题。
+1.升级了Net8。
+2.放弃NUGet改成本地调用PKHeX.Core.dll。
+3.目前已升级最新PKHeX.Core.dll
+4.由于没有匹配的ALM版本，因此目前只能使用pk文件进行交换。Showdown指令暂不可用， 我在努力。
 # SysBot.NET
 ![License](https://img.shields.io/badge/License-AGPLv3-blue.svg)
 
