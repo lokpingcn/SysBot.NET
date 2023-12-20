@@ -19,7 +19,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PKHeX.Core" Version="23.10.11" />
+    <!-- <PackageReference Include="PKHeX.Core" Version="23.10.11" /> -->
+	<Reference Include="PKHeX.Core">
+		<HintPath>..\SysBot.Pokemon\deps\PKHeX.Core.dll</HintPath>
+    </Reference>
     <PackageReference Include="System.Resources.Extensions" Version="7.0.0" />
   </ItemGroup>
 
