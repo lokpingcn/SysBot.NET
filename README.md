@@ -10,7 +10,7 @@
 ## 我的Disocrd頻道
 - https://discord.gg/TCErJXz4Xs
 ## 我的DoDo頻道
-- https://discord.gg/TCErJXz4Xs
+- https://imdodo.com/s/230948
 # SysBot.NET
 
 [sys-botbase](https://github.com/olliz0r/sys-botbase) client for remote control automation of Nintendo Switch consoles.
