@@ -1,4 +1,5 @@
 # Discord交互已漢化，非中文玩家勿用。
+# Discord interaction has been translated into Chinese, so non-Chinese players should not use it.
 由于原作者Easyworld长时间未更新，迫于使用需要我就自己更新了一部分。由于我不是开发者，不保证程序能够稳定运行，但只是我还没有遇到问题。
 - 1.升级了Net8。
 - 2.放弃NUGet改成本地调用PKHeX.Core.dll。
