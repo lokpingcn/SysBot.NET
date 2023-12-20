@@ -1,10 +1,17 @@
 # Discord交互已漢化，非中文玩家勿用。
 # Discord interaction has been translated into Chinese, so non-Chinese players should not use it.
-由于原作者Easyworld长时间未更新，迫于使用需要我就自己更新了一部分。由于我不是开发者，不保证程序能够稳定运行，但只是我还没有遇到问题。
-- 1.升级了Net8。
-- 2.放弃NUGet改成本地调用PKHeX.Core.dll。
-- 3.目前已升级最新PKHeX.Core.dll
-- 4.由于没有匹配的ALM版本，因此目前只能使用pk文件进行交换。Showdown指令暂不可用， 我在努力。
+由於原作者Easyworld長時間未更新，迫於使用需要我就自己更新了一部分。由於我不是開發者，不保證程序能夠穩定運行，但只是我還沒有遇到問題。
+- 1.升級了Net8。
+- 2.放棄NUGet改成本地調用PKHeX.Core.dll。
+- 3.目前已升級最新PKHeX.Core.dll
+- 4.由於沒有匹配的ALM版本，因此目前只能使用pk文件進行交換。Showdown指令暫不可用， 我在努力。
+
+# Bot使用或問題咨詢
+問題咨詢可通過加入社群後私信我溝通
+## 我的Disocrd頻道
+- https://discord.gg/TCErJXz4Xs
+## 我的DoDo頻道
+- https://discord.gg/TCErJXz4Xs
 # SysBot.NET
 ![License](https://img.shields.io/badge/License-AGPLv3-blue.svg)
 
