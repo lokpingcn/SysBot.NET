@@ -3,9 +3,8 @@
 由於原作者Easyworld長時間未更新，迫於使用需要我就自己更新了一部分。由於我不是開發者，不保證程序能夠穩定運行，但只是我還沒有遇到問題。
 - 1.升級了Net8。
 - 2.放棄NUGet改成本地調用PKHeX.Core.dll。
-- 3.目前已升級最新PKHeX.Core.dll
-- 4.由於沒有匹配的ALM版本，因此目前只能使用pk文件進行交換。Showdown指令暫不可用， 我在努力。
-
+- 3.目前已升級最新20231218版本PKHeX.Core.dll和PKHeX.Core.AutoMod.dll
+-  非常感谢Santacrab对本次升级的指导
 # Bot使用或問題咨詢
 問題咨詢可通過加入社群後私信我溝通
 ## 我的Disocrd頻道
