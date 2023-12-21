@@ -66,7 +66,7 @@ namespace SysBot.Pokemon.Discord
                 pkm = EntityConverter.ConvertToType(pkm, typeof(T), out _) ?? pkm;
                 if (pkm is not T pk || !la.Valid)
                 {
-                    var reason = result == "Timeout" ? $"That {spec} set took too long to generate." : result == "VersionMismatch" ? "Request refused: PKHeX and Auto-Legality Mod version mismatch." : $"I wasn't able to create a {spec} from that set.";
+                    var reason = result == "超時" ? $"That {spec} set took too long to generate." : result == "版本不匹配" ? "請求被拒絕：PKHeX和ALM版本不匹配，請暫時使用PKHeX生成寶可夢." : $"I wasn't able to create a {spec} from that set.";
                     var imsg = $"完犢子! {reason}";
                     if (result == "Failed")
                         imsg += $"\n{AutoLegalityWrapper.GetLegalizationHint(template, sav, pkm)}";
