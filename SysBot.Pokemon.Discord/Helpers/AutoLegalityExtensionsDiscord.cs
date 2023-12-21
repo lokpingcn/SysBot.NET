@@ -25,21 +25,21 @@ namespace SysBot.Pokemon.Discord
                 var spec = GameInfo.Strings.Species[template.Species];
                 if (!la.Valid)
                 {
-                    var reason = result == "Timeout" ? $"That {spec} set took too long to generate." : result == "VersionMismatch" ? "Request refused: PKHeX and Auto-Legality Mod version mismatch." : $"I wasn't able to create a {spec} from that set.";
-                    var imsg = $"Oops! {reason}";
+                    var reason = result == "超時" ? $"該 {spec} 集生成時間太長." : result == "版本不匹配" ? "請求被拒絕：PKHeX和ALM版本不匹配，請暫時使用PKHeX生成寶可夢." : $"我無法從該集合中創建 {spec} .";
+                    var imsg = $"完犢子! {reason}";
                     if (result == "Failed")
                         imsg += $"\n{AutoLegalityWrapper.GetLegalizationHint(template, sav, pkm)}";
                     await channel.SendMessageAsync(imsg).ConfigureAwait(false);
                     return;
                 }
 
-                var msg = $"Here's your ({result}) legalized PKM for {spec} ({la.EncounterOriginal.Name})!";
+                var msg = $"這是您的 ({result}) 合法化PKM，適用於 {spec} ({la.EncounterOriginal.Name})!";
                 await channel.SendPKMAsync(pkm, msg + $"\n{ReusableActions.GetFormattedShowdownText(pkm)}").ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 LogUtil.LogSafe(ex, nameof(AutoLegalityExtensionsDiscord));
-                var msg = $"Oops! An unexpected problem happened with this Showdown Set:\n```{string.Join("\n", set.GetSetLines())}```";
+                var msg = $"完犢子! Showdown出現意外問題:\n```{string.Join("\n", set.GetSetLines())}```";
                 await channel.SendMessageAsync(msg).ConfigureAwait(false);
             }
         }
@@ -85,7 +85,7 @@ namespace SysBot.Pokemon.Discord
 
             legal.RefreshChecksum();
 
-            var msg = $"Here's your legalized PKM for {download.SanitizedFileName}!\n{ReusableActions.GetFormattedShowdownText(legal)}";
+            var msg = $"這是您的合法化 {download.SanitizedFileName}!\n{ReusableActions.GetFormattedShowdownText(legal)}";
             await channel.SendPKMAsync(legal, msg).ConfigureAwait(false);
         }
     }
