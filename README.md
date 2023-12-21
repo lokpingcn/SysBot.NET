@@ -6,7 +6,7 @@
 - 3.目前已升級最新20231218版本PKHeX.Core.dll和PKHeX.Core.AutoMod.dll
 - 4.非常感謝Santacrab對本分支改版的指導
 # Bot使用或問題咨詢
-問題咨詢可加入QQ群交流:673346292
+問題咨詢可加入QQ群交流：673346292
 ## 我的Disocrd頻道
 - https://discord.gg/TCErJXz4Xs
 ## 我的DoDo頻道
