@@ -4,7 +4,7 @@
 - 1.升級了Net8。
 - 2.放棄NUGet改成本地調用PKHeX.Core.dll。
 - 3.目前已升級最新20231218版本PKHeX.Core.dll和PKHeX.Core.AutoMod.dll
--  非常感谢Santacrab对本次升级的指导
+- 4.非常感谢Santacrab对本分支改版的指导
 # Bot使用或問題咨詢
 問題咨詢可通過加入社群後私信我溝通
 ## 我的Disocrd頻道
