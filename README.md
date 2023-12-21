@@ -1,6 +1,6 @@
 # Discord交互已漢化，非中文玩家勿用。
 # Discord interaction has been translated into Chinese, so non-Chinese players should not use it.
-由於原作者Easyworld長時間未更新，迫於使用需要我就自己更新了一部分。由於我不是開發者，不保證程序能夠穩定運行，但只是我還沒有遇到問題。
+感谢[Easyworld](https://github.com/easyworld/SysBot.NET)的突出贡献，本分支一切荣誉归给他。由於原作者[Easyworld](https://github.com/easyworld/SysBot.NET)長時間未更新，迫於使用需要我就自己更新了一部分。由於我不是開發者，不保證程序能夠穩定運行，但只是我還沒有遇到問題。
 - 1.升級了Net8。
 - 2.放棄NUGet改成本地調用PKHeX.Core.dll。
 - 3.目前已升級最新20231218版本PKHeX.Core.dll和PKHeX.Core.AutoMod.dll
