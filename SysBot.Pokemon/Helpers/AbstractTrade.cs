@@ -160,7 +160,7 @@ namespace SysBot.Pokemon.Helpers
             var maxPkmsPerTrade = queueInfo.Hub.Config.Trade.MaxPkmsPerTrade;
             if (maxPkmsPerTrade <= 1)
             {
-                SendMessage("请联系群主将trade/MaxPkmsPerTrade配置改为大于1");
+                SendMessage("本Bot禁止使用批量交换功能，如需使用请移步VIP");
                 return false;
             }
             else if (multiNum > maxPkmsPerTrade)
@@ -180,7 +180,7 @@ namespace SysBot.Pokemon.Helpers
         {
             if (invalidCount == totalCount)
             {
-                SendMessage("一个都不合法，换个屁");
+                SendMessage("一个都不合法，无法交换");
                 return false;
             }
             else if (invalidCount != 0)
@@ -330,7 +330,7 @@ namespace SysBot.Pokemon.Helpers
 
             if (added == QueueResultAdd.AlreadyInQueue)
             {
-                msg = $"你已经在队列中，请不要重复发送";
+                msg = $"你已经在队列中，请勿重复发送!";
                 return false;
             }
 
@@ -343,7 +343,7 @@ namespace SysBot.Pokemon.Helpers
             {
                 var eta = queueInfo.Hub.Config.Queues.EstimateDelay(position.Position, botct);
                 //msg += $". Estimated: {eta:F1} minutes.";
-                msg += $", 需等待约{eta:F1}分钟";
+                msg += $", 还需等待约{eta:F1}分钟";
             }
 
             return true;
@@ -445,7 +445,7 @@ namespace SysBot.Pokemon.Helpers
             pk.Move1_PPUps = pk.Move2_PPUps = pk.Move3_PPUps = pk.Move4_PPUps = 0;
             pk.SetMaximumPPCurrent(pk.Moves);
             pk.SetSuggestedHyperTrainingData();
-            pk.SetSuggestedRibbons(template, enc, true, APILegality.TracebackHandlerType.GetTracebackHandler());
+            // pk.SetSuggestedRibbons(template, enc, true, APILegality.TracebackHandlerType.GetTracebackHandler());
         }
 
     }
