@@ -160,7 +160,7 @@ namespace SysBot.Pokemon.Helpers
             var maxPkmsPerTrade = queueInfo.Hub.Config.Trade.MaxPkmsPerTrade;
             if (maxPkmsPerTrade <= 1)
             {
-                SendMessage("本Bot禁止使用批量交换功能，如需使用请移步VIP");
+                SendMessage("本Bot禁止使用批量交换功能，如需使用请咨询群主");
                 return false;
             }
             else if (multiNum > maxPkmsPerTrade)
