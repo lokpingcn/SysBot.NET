@@ -15,7 +15,7 @@ namespace SysBot.Pokemon.Dodo
     {
         private readonly OpenApiService _openApiService;
         private static readonly string LogIdentity = "DodoBot";
-        private static readonly string Welcome = "at我并尝试对我说：\n皮卡丘\nps代码\n或者直接拖一个文件进来";
+        private static readonly string Welcome = "不能识别的指令！\n1.请使用**简体中文**/英文指令交换\n2.直接拖入PKHeX生成的.pk文件交换\n3.取消排队请输入:取消\n4.查询位置请输入:位置";
         private readonly string _channelId;
         private DodoSettings _dodoSettings;
         private string _botDodoSourceId = default!;
