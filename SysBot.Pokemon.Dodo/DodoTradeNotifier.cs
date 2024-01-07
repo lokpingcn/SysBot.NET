@@ -1,8 +1,10 @@
 ﻿using PKHeX.Core;
 using SysBot.Base;
 using System;
+using System.ComponentModel;//新增调用
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;//新增调用
 using System.Text.RegularExpressions;
 
 namespace SysBot.Pokemon.Dodo
@@ -40,32 +42,42 @@ namespace SysBot.Pokemon.Dodo
                 string tid = regex.Match(message).Groups[1].ToString();
                 regex = new Regex("SID: (\\d+)");
                 string sid = regex.Match(message).Groups[1].ToString();
-                var m1 = message.Split(':');
+				var m1 = message.Split(':');
 				if (m1.Length > 1)
 				{
                     var m2 = m1[1].Split('.');
                     if (m2 != null)
                         DodoBot<T>.SendPersonalMessage(info.Trainer.ID.ToString(), $"找到你了{m2[0]}，你的里ID(SID7):{sid},表ID(TID7):{tid}", IslandSourceId);
                 }
-                //DodoBot<T>.SendPersonalMessage(info.Trainer.ID.ToString(), $"找到你了，你的SID7:{sid},TID7:{tid}",
-                    //IslandSourceId);
             }
             else if (message.StartsWith("批量"))
             {
                 DodoBot<T>.SendChannelMessage(message, ChannelId);
             }
         }
+        public static string GetEnumDescription(Enum value)
+        {
+            FieldInfo fi = value.GetType().GetField(value.ToString());
+            DescriptionAttribute[] attributes = fi.GetCustomAttributes(typeof(DescriptionAttribute), false) as DescriptionAttribute[];
 
+            if (attributes != null && attributes.Any())
+            {
+                return attributes.First().Description;
+            }
+
+            return value.ToString();
+        }
         public void TradeCanceled(PokeRoutineExecutor<T> routine, PokeTradeDetail<T> info, PokeTradeResult msg)
         {
-            OnFinish?.Invoke(routine);
+            string description = GetEnumDescription(msg);
+			OnFinish?.Invoke(routine);
             var line = $"@{info.Trainer.TrainerName}: Trade canceled, {msg}";
             LogUtil.LogText(line);
-            DodoBot<T>.SendChannelAtMessage(info.Trainer.ID, "取消", ChannelId);
+            DodoBot<T>.SendChannelAtMessage(info.Trainer.ID, $"交易取消：{description}", ChannelId);
             var waitUserIds = DodoBot<T>.Info.GetUserIdList(4).ToList();
             for (int i = 1; i < waitUserIds.Count(); i++)
             {
-                DodoBot<T>.SendChannelAtMessage(waitUserIds[i], $"你在第{i + 1}位,还有{i}个以后就到你了！\n", ChannelId);
+                DodoBot<T>.SendChannelAtMessage(waitUserIds[i], $"你在第{i + 1}位，还有{i}个以后就到你了！\n", ChannelId);
             }
         }
 
@@ -76,12 +88,21 @@ namespace SysBot.Pokemon.Dodo
             var message = $"@{info.Trainer.TrainerName}: " + (tradedToUser != 0
                 ? $"Trade finished. Enjoy your {(Species) tradedToUser}!"
                 : "Trade finished!");
+			var text = //返回宝可梦信息
+                 $"我收到精灵的种类:{ShowdownTranslator<T>.GameStringsZh.Species[result.Species]}\n" +
+                 $"PID:{result.PID:X}\n" +
+                 $"加密常数:{result.EncryptionConstant:X}\n" +
+                 $"训练家姓名:{result.OT_Name}\n" +
+                 $"训练家性别:{(result.OT_Gender == 0 ? "男" : "女")}\n" +
+                 $"训练家表ID:{result.TrainerTID7}\n" +
+                 $"训练家里ID:{result.TrainerSID7}";				 
             LogUtil.LogText(message);
             DodoBot<T>.SendChannelAtMessage(info.Trainer.ID, "完成", ChannelId);
+			DodoBot<T>.SendPersonalMessage(info.Trainer.ID.ToString(), text, IslandSourceId);//新增私信返回宝可梦信息
             var waitUserIds = DodoBot<T>.Info.GetUserIdList(4).ToList();
             for (int i = 1; i < waitUserIds.Count(); i++)
             {
-                DodoBot<T>.SendChannelAtMessage(waitUserIds[i], $"你在第{i + 1}位,还有{i}个以后就到你了！\n", ChannelId);
+                DodoBot<T>.SendChannelAtMessage(waitUserIds[i], $"你在第{i + 1}位，还有{i}个以后就到你了！\n", ChannelId);
             }
         }
 
@@ -92,7 +113,7 @@ namespace SysBot.Pokemon.Dodo
                 $"@{info.Trainer.TrainerName} (ID: {info.ID}): Initializing trade{receive} with you. Please be ready.";
             msg += $" Your trade code is: {info.Code:0000 0000}";
             LogUtil.LogText(msg);
-            var text = $"\n派送:{ShowdownTranslator<T>.GameStringsZh.Species[Data.Species]}\n密码:见私信\n状态:初始化";
+            var text = $"\n派送:**{ShowdownTranslator<T>.GameStringsZh.Species[Data.Species]}**\n密码:见私信\n状态:初始化";//新增编号
             List<T> batchPKMs = (List<T>)info.Context.GetValueOrDefault("batch", new List<T>());
             if (batchPKMs.Count > 1)
             {
@@ -111,7 +132,7 @@ namespace SysBot.Pokemon.Dodo
             var message = $"I'm waiting for you{trainer}! My IGN is {routine.InGameName}.";
             message += $" Your trade code is: {info.Code:0000 0000}";
             LogUtil.LogText(message);
-            var text = $"派送:{ShowdownTranslator<T>.GameStringsZh.Species[Data.Species]}\n密码:见私信\n状态:搜索中";
+            var text = $"派送:**{ShowdownTranslator<T>.GameStringsZh.Species[Data.Species]}**\n密码:见私信\n状态:搜索中";//新增编号
             List<T> batchPKMs = (List<T>)info.Context.GetValueOrDefault("batch", new List<T>());
             if (batchPKMs.Count > 1)
             {
