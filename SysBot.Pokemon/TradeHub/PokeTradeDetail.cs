@@ -46,8 +46,11 @@ namespace SysBot.Pokemon
 
         /// <summary> Customized trade parameters. </summary>
         public Dictionary<string, object> Context = new();
-
-        public PokeTradeDetail(TPoke pkm, PokeTradeTrainerInfo info, IPokeTradeNotifier<TPoke> notifier, PokeTradeType type, int code, bool favored = false)
+		
+		//批量文件路径
+		public string Path = "";
+		public bool DeletFile;
+        public PokeTradeDetail(TPoke pkm, PokeTradeTrainerInfo info, IPokeTradeNotifier<TPoke> notifier, PokeTradeType type, int code, bool favored = false,string path = "",bool deletFile=false)
         {
             ID = Interlocked.Increment(ref CreatedCount) % 3000;
             Code = code;
@@ -57,6 +60,8 @@ namespace SysBot.Pokemon
             Type = type;
             Time = DateTime.Now;
             IsFavored = favored;
+			Path = path;
+			DeletFile = deletFile;
         }
 
         public void TradeInitialize(PokeRoutineExecutor<TPoke> routine) => Notifier.TradeInitialize(routine, this);
