@@ -97,7 +97,9 @@ namespace SysBot.Pokemon.Dodo
             if (!content.Contains($"<@!{_botDodoSourceId}>")) return;
 
             content = content.Substring(content.IndexOf('>') + 1);
-            if (typeof(TP) == typeof(PK9) && content.Contains("\n\n") && ShowdownTranslator<TP>.IsPS(content))// 仅SV支持批量，其他偷懒还没写
+            //if ((typeof(TP) == typeof(PK9) || (typeof(TP) == typeof(PK8)) && content.Contains("\n\n") && ShowdownTranslator<TP>.IsPS(content)))// 仅SV支持批量，其他偷懒还没写
+            //if (typeof(TP) == typeof(PK9) && content.Contains("\n\n") && ShowdownTranslator<TP>.IsPS(content))// 仅SV支持批量，其他偷懒还没写
+			if (content.Contains("\n\n") && ShowdownTranslator<TP>.IsPS(content))// 已开启批量
             {
                 ProcessWithdraw(eventBody.MessageId);
                 new DodoTrade<TP>(ulong.Parse(eventBody.DodoSourceId), eventBody.Personal.NickName, eventBody.ChannelId, eventBody.IslandSourceId).StartTradeMultiPs(content.Trim());
@@ -115,7 +117,9 @@ namespace SysBot.Pokemon.Dodo
                 new DodoTrade<TP>(ulong.Parse(eventBody.DodoSourceId), eventBody.Personal.NickName, eventBody.ChannelId, eventBody.IslandSourceId).StartDump();
                 return;
             }
-            else if (typeof(TP) == typeof(PK9) && content.Trim().Contains('+'))// 仅SV支持批量，其他偷懒还没写
+			//else if ((typeof(TP) == typeof(PK9) || (typeof(TP) == typeof(PK8)) && content.Trim().Contains('+')))// 仅SV支持批量，其他偷懒还没写
+			//else if (typeof(TP) == typeof(PK9) && content.Trim().Contains('+'))// 仅SV支持批量，其他偷懒还没写
+			else if (content.Trim().Contains('+'))// 已开启批量
             {
                 ProcessWithdraw(eventBody.MessageId);
                 new DodoTrade<TP>(ulong.Parse(eventBody.DodoSourceId), eventBody.Personal.NickName, eventBody.ChannelId, eventBody.IslandSourceId).StartTradeMultiChinesePs(content.Trim());
