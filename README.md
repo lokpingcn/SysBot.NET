@@ -1,6 +1,6 @@
 # Discord交互已漢化，非中文玩家勿用。
 # Discord interaction has been translated into Chinese, so non-Chinese players should not use it.
-感謝[Easyworld](https://github.com/easyworld/SysBot.NET)的突出貢獻，本分支一切榮譽歸給他。由於原作者[Easyworld](https://github.com/easyworld/SysBot.NET)長時間未更新，迫於使用需要我就自己更新了一部分功能。由於我不是開發者，不保證程序能夠穩定運行，但只是我還沒有遇到問題。
+感謝[Easyworld](https://github.com/easyworld/SysBot.NET)的突出貢獻，本分支一切榮譽歸給他。由於原作者[Easyworld](https://github.com/easyworld/SysBot.NET)長時間未更新功能，迫於使用需要我就自己更新了一部分，由於我不是開發者，不保證程序能夠穩定運行，但只是我還沒有遇到問題。另外，這個程序僅適用於我自己，不一定能滿足你的需求，請各位玩家自行斟酌。迫於使用需要我將持續更新該分支，如果你有使用問題或建議，可以加入QQ群交流：673346292
 ## 更新記錄
 -  2024/1/9 新增劍盾批量交換功能
 -  2024/1/8 新增交換取消原因，新增交換成功返回寶可夢信息
@@ -9,8 +9,6 @@
 -  2023/12/20 更新20231218版本PKHeX.Core.AutoMod.dll和PKHeX.Core.dll
 -  2023/12/20 升級.Net8，放棄NUGet改成本地調用PKHeX.Core.dll。
 -  2023/12/17 更新朱紫3.0指針
-# Bot使用或問題咨詢
-問題咨詢可加入QQ群交流：673346292
 ## 我的Disocrd頻道
 - https://discord.gg/TCErJXz4Xs
 ## 我的DoDo頻道
