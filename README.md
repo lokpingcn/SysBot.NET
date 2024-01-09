@@ -5,6 +5,7 @@
 - 2.放棄NUGet改成本地調用PKHeX.Core.dll。
 - 3.目前已升級最新版本PKHeX.Core.dll和PKHeX.Core.AutoMod.dll
 - 4.非常感謝Santacrab對本分支改版的指導
+- 5.新增剑盾批量功能
 # Bot使用或問題咨詢
 問題咨詢可加入QQ群交流：673346292
 ## 我的Disocrd頻道
