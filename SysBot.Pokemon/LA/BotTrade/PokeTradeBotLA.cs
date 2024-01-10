@@ -8,6 +8,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using static SysBot.Base.SwitchButton;
 using static SysBot.Pokemon.PokeDataOffsetsLA;
+using System.Collections.Generic;
+using System.IO;
+
 
 namespace SysBot.Pokemon
 {
@@ -25,6 +28,8 @@ namespace SysBot.Pokemon
         /// </summary>
         /// <remarks>If null, will skip dumping.</remarks>
         private readonly IDumper DumpSetting;
+		
+		private readonly string TradeF;
 
         /// <summary>
         /// Synchronized start for multiple bots.
@@ -42,6 +47,8 @@ namespace SysBot.Pokemon
             TradeSettings = hub.Config.Trade;
             AbuseSettings = hub.Config.TradeAbuse;
             DumpSetting = hub.Config.Folder;
+            TradeF = hub.Config.Folder.TradeFolder;
+            lastOffered = new byte[8];
         }
 
         // Cached offsets that stay the same per session.
@@ -52,6 +59,8 @@ namespace SysBot.Pokemon
 
         // Cached offsets that stay the same per trade.
         private ulong TradePartnerOfferedOffset;
+		
+		private byte[] lastOffered;
 
         public override async Task MainLoop(CancellationToken token)
         {
@@ -226,8 +235,11 @@ namespace SysBot.Pokemon
                 await UnSoftBan(token).ConfigureAwait(false);
 
             var toSend = poke.TradeData;
+			LogUtil.LogInfo($"尝试写入盒子,宝可梦种类id:{toSend.Species}", nameof(PokeTradeBotLA));
+			
             if (toSend.Species != 0)
                 await SetBoxPokemonAbsolute(BoxStartOffset, toSend, token, sav).ConfigureAwait(false);
+				LogUtil.LogInfo($"已经写入盒子,宝可梦种类id:{toSend.Species}", nameof(PokeTradeBotLA));
 
             if (!await IsOnOverworld(OverworldOffset, token).ConfigureAwait(false))
             {
@@ -301,57 +313,112 @@ namespace SysBot.Pokemon
                 await ExitTrade(false, token).ConfigureAwait(false);
                 return result;
             }
-
-            // Watch their status to indicate they have offered a Pokémon as well.
-            var offering = await ReadUntilChanged(TradePartnerOfferedOffset, new byte[] { 0x3 }, 25_000, 1_000, true, true, token).ConfigureAwait(false);
-            if (!offering)
+			//以下为新增批量功能
+			//批量文件识别
+			List<PA8> ls = (List<PA8>)poke.Context.GetValueOrDefault("batch", new List<PA8> { toSend });
+			if(poke.Type == PokeTradeType.MutiTrade || poke.DeletFile)
             {
-                await ExitTrade(false, token).ConfigureAwait(false);
-                return PokeTradeResult.TrainerTooSlow;
+               
+                string directory = Path.Combine(TradeF, poke.Path);
+                string[] fileEntries = Directory.GetFiles(directory);
+                Array.Sort(fileEntries);
+                Log($"读到文件的数量:{fileEntries.Length}");
+                foreach ( string entry in fileEntries )
+                {
+                    var data = File.ReadAllBytes(entry);
+                    LogUtil.LogInfo($"读到的文件:{entry}",nameof(PokeTradeBotLA));
+                    var pkt = EntityFormat.GetFromBytes(data);
+                    if(pkt != null)
+                    {
+                        pkt.RefreshChecksum();
+                        if (EntityConverter.ConvertToType(pkt, typeof(PA8), out _) is PA8 pk2)
+                            ls.Add(pk2);
+                    }
+                }
+                if(Directory.Exists(directory) && poke.DeletFile)
+                {
+                    foreach( string item in Directory.GetFiles(directory))
+                    {
+                        File.Delete(item);
+                    }
+                    Directory.Delete(directory);
+                }
             }
-
-            Log("Checking offered Pokémon.");
-            // If we got to here, we can read their offered Pokémon.
-
-            // Wait for user input... Needs to be different from the previously offered Pokémon.
-            var offered = await ReadUntilPresentPointer(Offsets.LinkTradePartnerPokemonPointer, 3_000, 0_050, BoxFormatSlotSize, token).ConfigureAwait(false);
-            if (offered == null || offered.Species < 1 || !offered.ChecksumValid)
+			
+			
+			//批量循环派送
+			PA8 offered = toSend;
+            int counting = 0;
+            bool offering;
+            foreach (var send in ls)
             {
-                Log("Trade ended because trainer offer was rescinded too quickly.");
-                await ExitTrade(false, token).ConfigureAwait(false);
-                return PokeTradeResult.TrainerOfferCanceledQuick;
-            }
+                counting++;
+                toSend = send;
+				
+				if (ls.Count > 1) poke.SendNotification(this,$"批量:等待交换第{counting}个宝可梦{ShowdownTranslator<PA8>.GameStringsZh.Species[toSend.Species]}");
+                //先写一次Box
+                await SetBoxPokemonAbsolute(BoxStartOffset, toSend, token, sav).ConfigureAwait(false);
+                //if(ls.Count > 1)
+                //{
+                //    poke.SendNotification(this, $"批量:等待交换{counting}只宝可梦,{ShowdownTranslator<PA8>.GameStringsZh.Species[toSend.Species]}");
+                //    LogUtil.LogInfo($"批量:等待交换第{counting}个宝可梦{ShowdownTranslator<PA8>.GameStringsZh.Species[toSend.Species]}", nameof(PokeTradeBotLA));
+                //}
 
-            PokeTradeResult update;
-            var trainer = new PartnerDataHolder(0, tradePartner.TrainerName, tradePartner.TID7);
-            (toSend, update) = await GetEntityToSend(sav, poke, offered, toSend, trainer, token).ConfigureAwait(false);
-            if (update != PokeTradeResult.Success)
-            {
-                await ExitTrade(false, token).ConfigureAwait(false);
-                return update;
-            }
+                // Watch their status to indicate they have offered a Pokémon as well.
+                offering = await ReadUntilChanged(TradePartnerOfferedOffset, new byte[] { 0x3 }, 25_000, 1_000, true, true, token).ConfigureAwait(false);
+                if (!offering)
+                {
+                    await ExitTrade(false, token).ConfigureAwait(false);
+                    return PokeTradeResult.TrainerTooSlow;
+                }
 
-            if (Hub.Config.Legality.UseTradePartnerInfo)
-            {
-                await SetBoxPkmWithSwappedIDDetailsPLA(toSend, tradePartner, sav, token);
-            }
+                Log("正在查询提供的宝可梦...");
+                // If we got to here, we can read their offered Pokémon.
 
-            Log("Confirming trade.");
-            var tradeResult = await ConfirmAndStartTrading(poke, token).ConfigureAwait(false);
-            if (tradeResult != PokeTradeResult.Success)
-            {
-                if (tradeResult == PokeTradeResult.TrainerLeft)
-                    Log("Trade canceled because trainer left the trade.");
-                await ExitTrade(false, token).ConfigureAwait(false);
-                return tradeResult;
-            }
+                // Wait for user input... Needs to be different from the previously offered Pokémon.
+                   offered = await ReadUntilPresentPointer(Offsets.LinkTradePartnerPokemonPointer, 3_000, 0_050, BoxFormatSlotSize, token).ConfigureAwait(false) 
+                    ?? throw new Exception("ReadUntilPresentPointer方法返回结果为null."); 
+                
+                if (offered == null || offered.Species < 1 || !offered.ChecksumValid)
+                {
+                    Log("交易结束，因为训练家取消得太快了.");
+                    await ExitTrade(false, token).ConfigureAwait(false);
+                    return PokeTradeResult.TrainerOfferCanceledQuick;
+                }
+                if (Hub.Config.Legality.UseTradePartnerInfo)
+                {
+                    await SetBoxPkmWithSwappedIDDetailsPLA(toSend, tradePartner, sav, token);
+                }
+                PokeTradeResult update;
+                var trainer = new PartnerDataHolder(0, tradePartner.TrainerName, tradePartner.TID7);
+                (toSend, update) = await GetEntityToSend(sav, poke, offered, toSend, trainer, token).ConfigureAwait(false);
+                if (update != PokeTradeResult.Success)
+                {
+                    await ExitTrade(false, token).ConfigureAwait(false);
+                    return update;
+                }
 
-            if (token.IsCancellationRequested)
-            {
-                await ExitTrade(false, token).ConfigureAwait(false);
-                return PokeTradeResult.RoutineCancel;
+                Log("正在确认交易...");
+                var tradeResult = await ConfirmAndStartTrading(poke, token).ConfigureAwait(false);
+                if (tradeResult != PokeTradeResult.Success)
+                {
+                    if (tradeResult == PokeTradeResult.TrainerLeft)
+                        Log("交易取消，因为训练家离开了.");
+                    await ExitTrade(false, token).ConfigureAwait(false);
+                    return tradeResult;
+                }
+                if (ls.Count > 1)
+                {
+                    poke.SendNotification(this, $"批量:第{counting}只宝可梦{ShowdownTranslator<PA8>.GameStringsZh.Species[toSend.Species]}，交换完成");
+                    LogUtil.LogInfo($"批量:等待交换第{counting}个宝可梦{ShowdownTranslator<PA8>.GameStringsZh.Species[toSend.Species]}", nameof(PokeTradeBotSV));
+                }
+                if (token.IsCancellationRequested)
+                {
+                    await ExitTrade(false, token).ConfigureAwait(false);
+                    return PokeTradeResult.RoutineCancel;
+                }
             }
-
+			
             // Trade was Successful!
             var received = await ReadPokemon(BoxStartOffset, BoxFormatSlotSize, token).ConfigureAwait(false);
             // Pokémon in b1s1 is same as the one they were supposed to receive (was never sent).
