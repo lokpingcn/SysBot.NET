@@ -374,11 +374,10 @@ namespace SysBot.Pokemon
             {
                 counting++;
                 toSend = send;
-               
-                await SetBoxPokemonAbsolute(BoxStartOffset, toSend, token, sav).ConfigureAwait(false); 
-                   
-                if (ls.Count > 1) LogUtil.LogInfo($"批量:等待交换第{counting}个宝可梦{ShowdownTranslator<PB8>.GameStringsZh.Species[toSend.Species]}", nameof(PokeTradeBotBS));
+               	if (ls.Count > 1) LogUtil.LogInfo($"批量:等待交换第{counting}个宝可梦{ShowdownTranslator<PB8>.GameStringsZh.Species[toSend.Species]}", nameof(PokeTradeBotBS));
 
+  
+                await SetBoxPokemonAbsolute(BoxStartOffset, toSend, token, sav).ConfigureAwait(false); 
                 // If we detected a change, they offered something.
                 offered = await ReadPokemon(LinkTradePokemonOffset, BoxFormatSlotSize, token).ConfigureAwait(false);
                 if (offered.Species == 0 || !offered.ChecksumValid)
