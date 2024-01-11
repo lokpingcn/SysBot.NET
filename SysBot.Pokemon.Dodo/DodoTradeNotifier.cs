@@ -1,4 +1,4 @@
-﻿using PKHeX.Core;
+using PKHeX.Core;
 using SysBot.Base;
 using System;
 using System.ComponentModel;//新增调用
@@ -73,7 +73,66 @@ namespace SysBot.Pokemon.Dodo
 			OnFinish?.Invoke(routine);
             var line = $"@{info.Trainer.TrainerName}: Trade canceled, {msg}";
             LogUtil.LogText(line);
-            DodoBot<T>.SendChannelAtMessage(info.Trainer.ID, $"交易取消：{description}", ChannelId);
+			//中文化取消原因
+			string chineseMessage;
+			switch (description)
+				{
+					case "NoTrainerFound":
+						chineseMessage = "未搜索到用户，请检查网络/注意操作速度！";
+						break;
+					case "TrainerTooSlow":
+						chineseMessage = "用户操作太慢，请重新发起交换！";
+						break;
+					case "TrainerLeft":
+						chineseMessage = "用户中途离开，请检查网络是否掉线";
+						break;
+					case "TrainerOfferCanceledQuick":
+						chineseMessage = "用户取消交易太快";
+						break;
+					case "TrainerRequestBad":
+						chineseMessage = "用户请求错误";
+						break;
+					case "IllegalTrade":
+						chineseMessage = "非法交换";
+						break;
+					case "SuspiciousActivity":
+						chineseMessage = "可疑交换";
+						break;
+						//接续
+					case "RoutineCancel":
+						chineseMessage = "常规取消";
+						break;
+					case "ExceptionConnection":
+						chineseMessage = "异常连接";
+						break;
+					case "ExceptionInternal":
+						chineseMessage = "内部异常";
+						break;
+					case "RecoverStart":
+						chineseMessage = "重新启动";
+						break;
+					case "ecoverPostLinkCode":
+						chineseMessage = "重新输入连接密码";
+						break;
+					case "RecoverOpenBox":
+						chineseMessage = "重新打开盒子";
+						break;
+					case "RecoverReturnOverworld":
+						chineseMessage = "重新返回初始界面";
+						break;
+					case "RecoverEnterUnionRoom":
+						chineseMessage = "重新进入宝可入口站";
+						break;
+					// Add more cases as needed
+					default:
+						chineseMessage = "未知原因";
+						break;
+				}
+
+			DodoBot<T>.SendChannelAtMessage(info.Trainer.ID, $"交易取消：{chineseMessage}", ChannelId);
+			
+			//原代码注释掉了
+            //DodoBot<T>.SendChannelAtMessage(info.Trainer.ID, $"交易取消2：{description}", ChannelId);
             var waitUserIds = DodoBot<T>.Info.GetUserIdList(4).ToList();
             for (int i = 1; i < waitUserIds.Count(); i++)
             {
