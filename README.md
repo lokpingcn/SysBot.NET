@@ -1,7 +1,7 @@
 # Discord交互已漢化，非中文玩家勿用。
 # Discord interaction has been translated into Chinese, so non-Chinese language players should not use it.
 ## 分支说明
-感謝[Easyworld](https://github.com/easyworld/SysBot.NET)的突出貢獻，本分支一切榮譽歸給他。由於原作者[Easyworld](https://github.com/easyworld/SysBot.NET)長時間未更新功能，迫於使用需要我就自己更新了一部分，由於我不是開發者，不保證程序能夠穩定運行，但只是我還沒有遇到問題。另外，這個程序僅適用於我自己，不一定能滿足你的需求，請各位玩家自行斟酌。迫於使用需要我將持續更新該分支，如果你有使用問題或建議，可以加入QQ群交流：673346292
+感謝[Easyworld](https://github.com/easyworld/SysBot.NET)的突出貢獻，本分支一切榮譽歸給他。由於[Easyworld](https://github.com/easyworld/SysBot.NET)長時間未更新其他功能，迫於使用需要我就自己更新了一部分，由於我不是開發者，不保證程序能夠穩定運行，但只是我還沒有遇到問題。另外，這個程序僅適用於我自己，不一定能滿足你的需求，請各位玩家自行斟酌。迫於使用需要我將持續更新該分支，如果你有使用問題或建議，可以加入QQ群交流：673346292
 ## 更新記錄
 -  2024/1/15 更新ALM20240112版本，修复编译BUG
 -  2024/1/11 新增不合法反馈及帮助指令，以及dc和dodo的中文化错误提示
