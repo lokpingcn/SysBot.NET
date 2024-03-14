@@ -7,7 +7,7 @@
 	 <Reference Include="PKHeX.Core">
       <HintPath>..\SysBot.Pokemon\deps\PKHeX.Core.dll</HintPath>
     </Reference>
-    <PackageReference Include="Discord.Net" Version="3.13.0" />
+    <PackageReference Include="Discord.Net" Version="3.13.1" />
     <PackageReference Include="TwitchLib.Client" Version="3.3.1" />
   </ItemGroup>
 
