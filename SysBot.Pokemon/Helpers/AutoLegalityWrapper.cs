@@ -44,8 +44,24 @@ namespace SysBot.Pokemon
             APILegality.SetBattleVersion = cfg.SetBattleVersion;
             APILegality.Timeout = cfg.Timeout;
 
-            if (!(APILegality.AllowHOMETransferGeneration = !cfg.EnableHOMETrackerCheck))
+            /*if (!(APILegality.AllowHOMETransferGeneration = !cfg.EnableHOMETrackerCheck))
                 typeof(ParseSettings).GetProperty(nameof(ParseSettings.Gen8TransferTrackerNotPresent))!.SetValue(null, Severity.Invalid);
+
+            // We need all the encounter types present, so add the missing ones at the end.
+            var missing = EncounterPriority.Except(cfg.PrioritizeEncounters);
+            cfg.PrioritizeEncounters.AddRange(missing);
+            cfg.PrioritizeEncounters = cfg.PrioritizeEncounters.Distinct().ToList(); // Don't allow duplicates.
+            EncounterMovesetGenerator.PriorityList = cfg.PrioritizeEncounters;*/
+            // As of February 2024, the default setting in PKHeX is Invalid for missing HOME trackers.
+            // If the host wants to allow missing HOME trackers, we need to override the default setting.
+            bool allowMissingHOME = !cfg.EnableHOMETrackerCheck;
+            APILegality.AllowHOMETransferGeneration = allowMissingHOME;
+            if (allowMissingHOME)
+            {
+                // Property setter is private; need to use reflection to manually set the value.
+                var prop = typeof(ParseSettings).GetProperty(nameof(ParseSettings.HOMETransferTrackerNotPresent));
+                prop?.SetValue(null, Severity.Fishy);
+            }
 
             // We need all the encounter types present, so add the missing ones at the end.
             var missing = EncounterPriority.Except(cfg.PrioritizeEncounters);
@@ -54,7 +70,7 @@ namespace SysBot.Pokemon
             EncounterMovesetGenerator.PriorityList = cfg.PrioritizeEncounters;
         }
 
-        private static void InitializeTrainerDatabase(LegalitySettings cfg)
+        /*private static void InitializeTrainerDatabase(LegalitySettings cfg)
         {
             // Seed the Trainer Database with enough fake save files so that we return a generation sensitive format when needed.
             string OT = cfg.GenerateOT;
@@ -86,6 +102,56 @@ namespace SysBot.Pokemon
                         TrainerSettings.Register(fallback);
                 }
             }
+        }*/
+        //修改为
+        private static void InitializeTrainerDatabase(LegalitySettings cfg)
+        {
+            var externalSource = cfg.GeneratePathTrainerInfo;
+            if (Directory.Exists(externalSource))
+                TrainerSettings.LoadTrainerDatabaseFromPath(externalSource);
+
+            // Seed the Trainer Database with enough fake save files so that we return a generation sensitive format when needed.
+            var fallback = GetDefaultTrainer(cfg);
+            for (byte generation = 1; generation <= PKX.Generation; generation++)
+            {
+                var versions = GameUtil.GetVersionsInGeneration(generation, PKX.Version);
+                foreach (var version in versions)
+                    RegisterIfNoneExist(fallback, generation, version);
+            }
+            // Manually register for LGP/E since Gen7 above will only register the 3DS versions.
+            RegisterIfNoneExist(fallback, 7, GameVersion.GP);
+            RegisterIfNoneExist(fallback, 7, GameVersion.GE);
+        }
+
+        private static SimpleTrainerInfo GetDefaultTrainer(LegalitySettings cfg)
+        {
+            var OT = cfg.GenerateOT;
+            if (OT.Length == 0)
+                OT = "Blank"; // Will fail if actually left blank.
+            var fallback = new SimpleTrainerInfo(GameVersion.Any)
+            {
+                Language = (byte)cfg.GenerateLanguage,
+                TID16 = cfg.GenerateTID16,
+                SID16 = cfg.GenerateSID16,
+                OT = OT,
+                Generation = 0,
+            };
+            return fallback;
+        }
+
+        private static void RegisterIfNoneExist(SimpleTrainerInfo fallback, byte generation, GameVersion version)
+        {
+            fallback = new SimpleTrainerInfo(version)
+            {
+                Language = fallback.Language,
+                TID16 = fallback.TID16,
+                SID16 = fallback.SID16,
+                OT = fallback.OT,
+                Generation = generation,
+            };
+            var exist = TrainerSettings.GetSavedTrainerData(version, generation, fallback);
+            if (exist is SimpleTrainerInfo) // not anything from files; this assumes ALM returns SimpleTrainerInfo for non-user-provided fake templates.
+                TrainerSettings.Register(fallback);
         }
 
         private static void InitializeCoreStrings()
@@ -101,7 +167,7 @@ namespace SysBot.Pokemon
         {
             if (pkm.IsNicknamed && StringsUtil.IsSpammyString(pkm.Nickname))
                 return false;
-            if (StringsUtil.IsSpammyString(pkm.OT_Name) && !IsFixedOT(new LegalityAnalysis(pkm).EncounterOriginal, pkm))
+            if (StringsUtil.IsSpammyString(pkm.OriginalTrainerName) && !IsFixedOT(new LegalityAnalysis(pkm).EncounterOriginal, pkm))
                 return false;
             return !FormInfo.IsFusedForm(pkm.Species, pkm.Form, pkm.Format);
         }
@@ -116,7 +182,7 @@ namespace SysBot.Pokemon
                 WB8 wb8 => wb8.GetHasOT(pkm.Language),
                 WC8 wc8 => wc8.GetHasOT(pkm.Language),
                 WB7 wb7 => wb7.GetHasOT(pkm.Language),
-                { Generation: >= 5 } gift => gift.OT_Name.Length > 0,
+                { Generation: >= 5 } gift => gift.OriginalTrainerName.Length > 0,
                 _ => true,
             },
             _ => false,
@@ -136,7 +202,7 @@ namespace SysBot.Pokemon
             throw new ArgumentException("Type does not have a recognized trainer fetch.", typeof(T).Name);
         }
 
-        public static ITrainerInfo GetTrainerInfo(int gen) => TrainerSettings.GetSavedTrainerData(gen);
+        public static ITrainerInfo GetTrainerInfo(byte gen) => TrainerSettings.GetSavedTrainerData(gen);
 
         public static PKM GetLegal(this ITrainerInfo sav, IBattleTemplate set, out string res)
         {
