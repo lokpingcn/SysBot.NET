@@ -18,7 +18,7 @@ namespace SysBot.Pokemon.Discord
         [Command("convert"), Alias("showdown")]
         [Summary("Tries to convert the Showdown Set to pkm data.")]
         [Priority(1)]
-        public async Task ConvertShowdown([Summary("Generation/Format")] int gen, [Remainder][Summary("Showdown Set")] string content)
+        public async Task ConvertShowdown([Summary("Generation/Format")] byte gen, [Remainder][Summary("Showdown Set")] string content)
         {
             await Context.Channel.ReplyWithLegalizedSetAsync(content, gen).ConfigureAwait(false);
         }
