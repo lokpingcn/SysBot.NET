@@ -819,8 +819,8 @@ namespace SysBot.Pokemon
                 var msg = Hub.Config.Trade.DumpTradeLegalityCheck ? verbose : $"File {ctr}";
 
                 // Extra information about trainer data for people requesting with their own trainer data.
-                var ot = pk.OT_Name;
-                var ot_gender = pk.OT_Gender == 0 ? "Male" : "Female";
+                var ot = pk.OriginalTrainerName;
+                var ot_gender = pk.OriginalTrainerGender == 0 ? "Male" : "Female";
                 var tid = pk.GetDisplayTID().ToString(pk.GetTrainerIDFormat().GetTrainerIDFormatStringTID());
                 var sid = pk.GetDisplaySID().ToString(pk.GetTrainerIDFormat().GetTrainerIDFormatStringSID());
                 msg += $"\n**Trainer Data**\n```OT: {ot}\nOTGender: {ot_gender}\nTID: {tid}\nSID: {sid}```";
@@ -1002,14 +1002,14 @@ namespace SysBot.Pokemon
                 return false;
             }
             var cln = toSend.Clone();
-            cln.OT_Gender = tradePartner.Gender;
+            cln.OriginalTrainerGender = (byte)tradePartner.Gender;
             cln.TrainerTID7 = (uint)Math.Abs(tradePartner.DisplayTID);
             cln.TrainerSID7 = (uint)Math.Abs(tradePartner.DisplaySID);
             cln.Language = tradePartner.Language;
-            cln.OT_Name = tradePartner.OT;
-            
+            cln.OriginalTrainerName = tradePartner.OT;
+
             // copied from https://github.com/Wanghaoran86/TransFireBot/commit/f7c5b39ce2952818177a97babb8b3df027e673fb
-            if (toSend.Species == (ushort)Species.Koraidon || toSend.Species == (ushort)Species.GougingFire || toSend.Species == (ushort)Species.RagingBolt)
+            /*if (toSend.Species == (ushort)Species.Koraidon || toSend.Species == (ushort)Species.GougingFire || toSend.Species == (ushort)Species.RagingBolt)
             {
                 cln.Version = (int)GameVersion.SL;
                 Log("朱版本限定宝可梦，强制修改版本为朱");
@@ -1024,9 +1024,34 @@ namespace SysBot.Pokemon
                 cln.Version = tradePartner.Game;
             }
             cln.ClearNickname();
+            */
+            // copied from https://github.com/Wanghaoran86/TransFireBot/commit/f7c5b39ce2952818177a97babb8b3df027e673fb
+            ushort species = toSend.Species;
+            GameVersion version;
+            switch (species)
+            {
+                case (ushort)Species.Koraidon:
+                case (ushort)Species.GougingFire:
+                case (ushort)Species.RagingBolt:
+                    version = GameVersion.SL;
+                    Log("朱版本限定宝可梦，强制修改版本为朱");
+                    break;
+                case (ushort)Species.Miraidon:
+                case (ushort)Species.IronCrown:
+                case (ushort)Species.IronBoulder:
+                    version = GameVersion.VL;
+                    Log("紫版本限定宝可梦，强制修改版本为紫");
+                    break;
+                default:
+                    version = (GameVersion)tradePartner.Game;
+                    break;
+            }
+            cln.Version = version;
+
+            cln.ClearNickname();
 
             // thanks @Wanghaoran86
-            if (toSend.Met_Location == Locations.TeraCavern9 && toSend.IsShiny)
+            if (toSend.MetLocation == Locations.TeraCavern9 && toSend.IsShiny)
             {
                 cln.PID = (((uint)(cln.TID16 ^ cln.SID16) ^ (cln.PID & 0xFFFF) ^ 1u) << 16) | (cln.PID & 0xFFFF);
             }

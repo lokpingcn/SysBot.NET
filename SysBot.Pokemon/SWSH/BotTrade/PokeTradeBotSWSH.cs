@@ -499,11 +499,11 @@ namespace SysBot.Pokemon
             var data = await Connection.ReadBytesAsync(LinkTradePartnerNameOffset - 0x8, 8, token).ConfigureAwait(false);
             var tidsid = BitConverter.ToUInt32(data, 0);
             var cln = (PK8)toSend.Clone();
-            cln.OT_Gender = data[6];
+            cln.OriginalTrainerGender = data[6];
             cln.TrainerTID7 = tidsid % 1_000_000;
             cln.TrainerSID7 = tidsid / 1_000_000;
             cln.Language = data[5];
-            cln.OT_Name = trainerName;
+            cln.OriginalTrainerName = trainerName;
             cln.ClearNickname();
 
             if (toSend.IsShiny)
@@ -747,8 +747,8 @@ namespace SysBot.Pokemon
                 var msg = Hub.Config.Trade.DumpTradeLegalityCheck ? verbose : $"File {ctr}";
 
                 // Extra information about trainer data for people requesting with their own trainer data.
-                var ot = pk.OT_Name;
-                var ot_gender = pk.OT_Gender == 0 ? "Male" : "Female";
+                var ot = pk.OriginalTrainerName;
+                var ot_gender = pk.OriginalTrainerGender == 0 ? "Male" : "Female";
                 var tid = pk.GetDisplayTID().ToString(pk.GetTrainerIDFormat().GetTrainerIDFormatStringTID());
                 var sid = pk.GetDisplaySID().ToString(pk.GetTrainerIDFormat().GetTrainerIDFormatStringSID());
                 msg += $"\n**Trainer Data**\n```OT: {ot}\nOTGender: {ot_gender}\nTID: {tid}\nSID: {sid}```";
