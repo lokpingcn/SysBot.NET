@@ -48,6 +48,7 @@ public class TradeModule<T> : ModuleBase<SocketCommandContext> where T : PKM, ne
     public async Task TradeAsync([Summary("Trade Code")] int code, [Summary("Showdown Set")][Remainder] string content)
     {
         content = ReusableActions.StripCodeBlock(content);
+        content = PmDataNameDiscord.PmConvert(content);//中文化
         var set = new ShowdownSet(content);
         var template = AutoLegalityWrapper.GetTemplate(set);
         if (set.InvalidLines.Count != 0)
