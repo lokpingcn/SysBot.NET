@@ -172,7 +172,19 @@ public class TradeModule<T> : ModuleBase<SocketCommandContext> where T : PKM, ne
             await ReplyAsync("提供的附件與該模組不相容！").ConfigureAwait(false);
             return;
         }
-
+        var la = new LegalityAnalysis(pk);//審核玩家檔案 初始訓練家字元 並協助自動清除多餘字元
+        if (!la.Valid)
+        {
+            PKM checking_PM = pk.Clone();
+            PkmCalculation.ClearOTTrash(checking_PM, checking_PM.OriginalTrainerName);
+            var checking_PM_la = new LegalityAnalysis(checking_PM);
+            if (checking_PM_la.Valid)
+            {
+                string speciesName = GameInfo.GetStrings(8).specieslist[pk.Species];
+                pk = (T)checking_PM;
+                await ReplyAsync($"偵測到, {speciesName} 寶可夢存在垃圾位元組，已自動清除垃圾位元組。").ConfigureAwait(false);
+            }
+        }
         await AddTradeToQueueAsync(code, usr.Username, pk, sig, usr).ConfigureAwait(false);
     }
 
