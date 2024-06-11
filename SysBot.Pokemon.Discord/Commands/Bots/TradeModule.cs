@@ -31,6 +31,16 @@ public class TradeModule<T> : ModuleBase<SocketCommandContext> where T : PKM, ne
         await ReplyAsync("These are the users who are currently waiting:", embed: embed.Build()).ConfigureAwait(false);
     }
 
+    [Command("交易")]
+    [Alias("交易")]
+    [Summary("Makes the bot trade you the provided Pokémon file.")]
+    [RequireQueueRole(nameof(DiscordManager.RolesTrade))]
+    public Task TradeAsyncAttach_1([Summary("Trade Code")] int code)
+    {
+        var sig = Context.User.GetFavor();
+        return TradeAsyncAttach(code, sig, Context.User);
+    }
+    
     [Command("trade")]
     [Alias("t")]
     [Summary("Makes the bot trade you the provided Pokémon file.")]
@@ -88,6 +98,16 @@ public class TradeModule<T> : ModuleBase<SocketCommandContext> where T : PKM, ne
         }
     }
 
+    [Command("交易")]
+    [Alias("交易")]
+    [Summary("Makes the bot trade you a Pokémon converted from the provided Showdown Set.")]
+    [RequireQueueRole(nameof(DiscordManager.RolesTrade))]
+    public Task TradeAsync_1([Summary("Showdown Set")][Remainder] string content)
+    {
+        var code = Info.GetRandomTradeCode();
+        return TradeAsync(code, content);
+    }
+    
     [Command("trade")]
     [Alias("t")]
     [Summary("Makes the bot trade you a Pokémon converted from the provided Showdown Set.")]
