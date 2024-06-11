@@ -1,5 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
+  <PropertyGroup>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+    <LangVersion>12</LangVersion>
+  </PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="DoDo.Open.Sdk" Version="1.7.0" />
 	</ItemGroup>
