@@ -1,4 +1,4 @@
-## 此项目已经停止更新
+## 此项目已经停止更新，请前往**easyworld/SysBot.NET**获得原版本
 
 # SysBot.NET
 ![License](https://img.shields.io/badge/License-AGPLv3-blue.svg)
