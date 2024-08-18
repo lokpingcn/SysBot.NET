@@ -1,3 +1,5 @@
+## 此项目已经停止更新
+
 # SysBot.NET
 ![License](https://img.shields.io/badge/License-AGPLv3-blue.svg)
 
